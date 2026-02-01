@@ -32,40 +32,26 @@ export async function POST(req: NextRequest) {
     // Stream the response to the frontend
     const encoder = new TextEncoder();
 
-    
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          const chatStream = await streamAnswer(prompt);
 
-//   const stream = new ReadableStream({
-//     async start(controller) {
-//       try {
-//         controller.enqueue(encoder.encode("Chunk 1\n"));
-//         await new Promise(r => setTimeout(r, 1000));
-//         controller.enqueue(encoder.encode("Chunk 2\n"));
-//         await new Promise(r => setTimeout(r, 1000));
-//         controller.enqueue(encoder.encode("Chunk 3\n"));
-//       } finally {
-//         controller.close();
-//       }
-//     },
-//   });
-
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        const chatStream = await streamAnswer(prompt);
-        
-        for await (const chunk of chatStream) {
-          const content = chunk.choices?.[0]?.delta?.content || "";
-          if (content) {
-            controller.enqueue(encoder.encode(content));
+          for await (const chunk of chatStream) {
+            const content = chunk.choices?.[0]?.delta?.content || "";
+            if (content) {
+              controller.enqueue(encoder.encode(content));
+            }
           }
+        } catch (e) {
+          controller.enqueue(
+            encoder.encode("\n[Error communicating with OpenAI]\n")
+          );
+        } finally {
+          controller.close();
         }
-      } catch (e) {
-        controller.enqueue(encoder.encode("\n[Error communicating with OpenAI]\n"));
-      } finally {
-        controller.close();
-      }
-    },
-  });
+      },
+    });
 
     return new Response(stream, {
       headers: {
@@ -81,4 +67,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
