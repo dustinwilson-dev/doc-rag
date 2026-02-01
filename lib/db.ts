@@ -4,10 +4,14 @@ const sql = neon(process.env.DATABASE_URL!);
 
 // ---------- DOCUMENTS ----------
 
-export async function insertDocument(userId: string, title: string) {
+export async function insertDocument(
+  userId: string,
+  title: string,
+  preview: string,
+) {
   const [doc] = await sql`
-    INSERT INTO documents (user_id, title)
-    VALUES (${userId}, ${title})
+    INSERT INTO documents (user_id, title, preview)
+    VALUES (${userId}, ${title}, ${preview})
     RETURNING *;
   `;
   return doc;
@@ -15,11 +19,32 @@ export async function insertDocument(userId: string, title: string) {
 
 export async function getDocumentsByUser(userId: string) {
   return await sql`
-    SELECT id, title, created_at
+    SELECT id, title, created_at, preview
     FROM documents
     WHERE user_id = ${userId}
     ORDER BY created_at DESC;
   `;
+}
+
+export async function deleteDocumentById(documentId: string, userId: string) {
+  const deleted = await sql`
+    DELETE FROM documents
+    WHERE id = ${documentId}
+      AND user_id = ${userId}
+    RETURNING id;
+  `;
+
+  return { ok: deleted.length === 1 };
+}
+
+export async function deleteDocumentByUser(userId: string) {
+  const deleted = await sql`
+    DELETE FROM documents
+    WHERE user_id = ${userId}
+    RETURNING id;
+  `;
+
+  return { ok: deleted.length === 1 };
 }
 
 // ---------- CHUNKS ----------
@@ -58,7 +83,7 @@ export async function retrieveTopChunks(
 
   const topK = opts?.topK ?? 5;
   const minScore = opts?.minScore ?? 0.2;
-  
+
   return await sql`
     SELECT
       c.id,
