@@ -10,3 +10,12 @@ export async function embedText(text: string) {
 
     return res.data[0].embedding as number[];
 }
+
+export async function embedTexts(texts: string[]) {
+  const res = await client.embeddings.create({
+    model: "text-embedding-3-small",
+    input: texts,
+  });
+
+  return res.data.map(d => d.embedding as number[]);
+}
