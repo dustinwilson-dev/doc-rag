@@ -1,12 +1,17 @@
+import { retrieveTopChunks } from "@/lib/db";
 import { embedText } from "@/lib/embedding";
 import { streamAnswer } from "@/lib/openai";
-import { retrieveTopChunks } from "@/lib/retrieve";
+import { getSessionId } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
 export async function POST(req: NextRequest) {
   try {
-    const { inquiry } = await req.json();
+    const { inquiry, docId } = await req.json();
+    let userId = await getSessionId();
+    if (!userId) {
+      return NextResponse.json({ error: "No user id" });
+    }
 
     if (!inquiry || !inquiry.trim()) {
       return NextResponse.json(
@@ -17,9 +22,15 @@ export async function POST(req: NextRequest) {
 
     const queryEmbedding = await embedText(inquiry);
 
-    const similarEmbeddings = retrieveTopChunks(queryEmbedding);
+    const similarEmbeddings = await retrieveTopChunks(docId, userId, queryEmbedding);
+    if (!similarEmbeddings || similarEmbeddings.length === 0 ) {
+      return NextResponse.json(
+        { error: "No relevant document chunks found" },
+        { status: 400 }
+      );
+    }
 
-    const context = similarEmbeddings.map(c => c.chunk.text).join("\n\n");
+    const context = similarEmbeddings.map((c) => c.content).join("\n\n");
 
     const prompt = `
         Context:
