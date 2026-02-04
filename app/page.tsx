@@ -1,6 +1,7 @@
 "use client";
 
 import AskQuestions from "@/app/components/AskQuestions/AskQuestions";
+import DarkModeToggle from "@/app/components/DarkModeToggle/DarkModeToggle";
 import SavedDocuments from "@/app/components/SavedDocuments/SavedDocuments";
 import UploadDocuments from "@/app/components/UploadDocuments/UploadDocuments";
 import { Doc } from "@/lib/types";
@@ -22,6 +23,7 @@ export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6 gap-8">
       <h1 className="text-3xl font-bold">Doc Chatbot (RAG Practice)</h1>
+      <DarkModeToggle />
 
       {/* Upload section */}
       <UploadDocuments setCurrDoc={setCurrDoc} setDocs={setDocs} />

@@ -73,7 +73,7 @@ const SavedDocuments = ({
           <div className="flex justify-between items-center">
             <h2 className="font-semibold text-xl">3. Saved Documents</h2>
             <button
-              className="hover:cursor-pointer px-4 py-2 rounded-lg border hover:bg-gray-200"
+              className="hover:cursor-pointer px-4 py-2 rounded-lg border hover-surface"
               onClick={() => {
                 handleDeleteAll();
               }}
@@ -91,7 +91,7 @@ const SavedDocuments = ({
                 </p>
                 <div className="flex justify-between">
                   <button
-                    className="hover:cursor-pointer px-2 py-1 rounded-lg border hover:bg-gray-200"
+                    className="hover:cursor-pointer px-2 py-1 rounded-lg border hover-surface"
                     onClick={() => {
                       setCurrDoc(doc);
                     }}
@@ -99,7 +99,7 @@ const SavedDocuments = ({
                     Ask Questions
                   </button>
                   <button
-                    className="hover:cursor-pointer px-2 py-1 rounded-lg border hover:bg-gray-200"
+                    className="hover:cursor-pointer px-2 py-1 rounded-lg border hover-surface"
                     onClick={() => {
                       handleDelete(doc);
                     }}

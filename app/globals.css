@@ -3,6 +3,7 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
+    --hover-bg: #f3f4f6;
 }
 
 @theme inline {
@@ -14,9 +15,25 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --background: #0a0a0a;
-        --foreground: #ededed;
+        --background: #242424;
+        --foreground: #ffffff;
+    --hover-bg: #353535;
     }
+}
+
+@layer utilities {
+    .hover-surface {
+        @apply hover:bg-(--hover-bg);
+    }
+}
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+    --background: #242424;
+    --foreground: #ffffff;
+    --hover-bg: #353535;
 }
 
 body {
@@ -28,10 +45,10 @@ body {
 .typewriter {
     border-right: .05em solid black;
     animation: caret 1s steps(1) infinite;
-  }
-  
-  @keyframes caret {
+}
+
+@keyframes caret {
     50% {
-      border-color: transparent;
+        border-color: transparent;
     }
-  }
+}

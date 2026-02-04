@@ -84,7 +84,7 @@ const AskQuestions = ({ currDoc, loading, setLoading }: PageProps) => {
           <button
             onClick={handleInquiry}
             disabled={loading}
-            className="px-4 py-2 rounded-lg border hover:cursor-pointer hover:bg-gray-100"
+            className="px-4 py-2 rounded-lg border hover:cursor-pointer hover-surface"
           >
             {loading ? "Thinking..." : "Ask"}
           </button>

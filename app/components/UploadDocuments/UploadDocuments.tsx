@@ -39,7 +39,6 @@ const UploadDocuments = ({ setCurrDoc, setDocs }: PageProps) => {
     }
   };
 
-
   return (
     <>
       <section className="w-full max-w-xl border rounded-xl p-4 space-y-4">
@@ -48,7 +47,7 @@ const UploadDocuments = ({ setCurrDoc, setDocs }: PageProps) => {
           ref={ref}
           type="file"
           accept=".txt,text/plain"
-        //   accept=".pdf,.txt,.md"
+          //   accept=".pdf,.txt,.md"
           className="sr-only"
           onChange={(e) => {
             setFile(e.target.files?.[0] ?? null);
@@ -58,16 +57,16 @@ const UploadDocuments = ({ setCurrDoc, setDocs }: PageProps) => {
         <button
           type="button"
           onClick={() => ref.current?.click()}
-          className="flex w-full items-center justify-between rounded-md border bg-white px-3 py-2 text-left text-sm shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black hover:cursor-pointer"
+          className="flex w-full items-center justify-between rounded-md border px-3 py-2 text-left text-sm shadow-sm hover-surface focus:outline-none focus:ring-2 focus:ring-black hover:cursor-pointer"
         >
-          <span className="truncate text-gray-700">{label}</span>
-          <span className="ml-3 rounded bg-gray-100 px-2 py-1 text-xs text-gray-700">
+          <span className="truncate">{label}</span>
+          <span className="ml-3 rounded px-2 py-1 text-xs border">
             Browse
           </span>
         </button>
         <button
           onClick={handleUpload}
-          className="px-4 py-2 rounded-lg border hover:cursor-pointer hover:bg-gray-100"
+          className="px-4 py-2 rounded-lg border hover:cursor-pointer hover-surface"
           disabled={!file}
         >
           {file ? `Upload ${file.name}` : "Select a file to upload"}
