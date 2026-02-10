@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAndSetSessionId, getSessionId } from "@/lib/session";
 import { sql } from "@vercel/postgres";
-import { deleteDocumentByUser, getDocumentsByUser, insertChunksBulk, insertDocument } from "@/lib/db";
+import {
+  deleteDocumentByUser,
+  getDocumentsByUser,
+  insertChunksBulk,
+  insertDocument,
+} from "@/lib/db";
 import { chunkText } from "@/lib/chunkText";
 import { embedTexts } from "@/lib/embedding";
+import { markdownToText } from "@/lib/markdown";
 
 export async function GET() {
   const userId = await getSessionId();
@@ -30,21 +36,19 @@ export async function POST(req: NextRequest) {
 
   const name = file.name.toLowerCase();
 
-  if (name.endsWith(".txt") || name.endsWith(".md")) {
+  if (name.endsWith(".txt")) {
     text = await file.text();
+  } else if (name.endsWith(".md")) {
+    const md = await file.text();
+    text = await markdownToText(md);
   } else if (name.endsWith(".pdf")) {
     throw new Error("Not supporting pdf yet");
-    // text = await extractPdf(file);
   } else {
     throw new Error("Unsupported file type");
   }
 
-  const preview = text
-  .replace(/\s+/g, " ")
-  .trim()
-  .slice(0, 160)
-  + "...";
-
+  const clean = text.replace(/\s+/g, " ").trim().slice(0, 160) + "...";
+  const preview = clean.length > 160 ? clean.slice(0, 160) + "..." : clean;
 
   const savedDoc = await insertDocument(userId, name, preview);
 
@@ -85,4 +89,3 @@ export async function DELETE() {
 
   return NextResponse.json({ ok: true });
 }
-

@@ -46,7 +46,7 @@ const UploadDocuments = ({ setCurrDoc, setDocs }: PageProps) => {
         <input
           ref={ref}
           type="file"
-          accept=".txt,text/plain"
+          accept=".txt,.md,text/plain"
           //   accept=".pdf,.txt,.md"
           className="sr-only"
           onChange={(e) => {
