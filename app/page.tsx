@@ -2,6 +2,7 @@
 
 import AskQuestions from "@/app/components/AskQuestions/AskQuestions";
 import DarkModeToggle from "@/app/components/DarkModeToggle/DarkModeToggle";
+import Footer from "@/app/components/Footer/Footer";
 import SavedDocuments from "@/app/components/SavedDocuments/SavedDocuments";
 import UploadDocuments from "@/app/components/UploadDocuments/UploadDocuments";
 import { Doc } from "@/lib/types";
@@ -37,6 +38,7 @@ export default function Home() {
 
       {/* Saved documents section */}
       <SavedDocuments fetchDocs={fetchDocs} docs={docs} setDocs={setDocs} setLoading={setLoading} setCurrDoc={setCurrDoc} />
+      <Footer />
     </main>
   );
 }
