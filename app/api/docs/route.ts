@@ -53,9 +53,9 @@ export async function POST(req: NextRequest) {
   const savedDoc = await insertDocument(userId, name, preview);
 
   const chunkStrings = chunkText(text, {
-    maxChars: 1000,
-    minChars: 250,
-    overlapChars: 125,
+    maxChars: 600,
+    minChars: 200,
+    overlapChars: 100,
   });
 
   const embeddings = await embedTexts(chunkStrings);
